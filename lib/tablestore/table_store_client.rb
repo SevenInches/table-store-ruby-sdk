@@ -655,19 +655,18 @@ class TableStoreClient
   def compute_update_row_size(primary_key, attribute_columns)
     size = LITTLE_ENDIAN_SIZE
     size += compute_primary_key_size(primary_key)
-
     if attribute_columns.length != 0
       size += 1
       attribute_columns.keys.each do |update_type|
         columns = attribute_columns[update_type]
         if columns.is_a?(String)
           size += compute_column_size2(column, nil, update_type)
-        elsif columns.is_a?(Array)
+        elsif columns.is_a?(Hash)
           columns.each do |column|
             if column.length == 1
               size += compute_column_size2(column[0], nil, update_type)
-            elsif columns.length >= 2
-              compute_column_size2(column[0], column[1], update_type)
+            elsif column.length >= 2
+              size += compute_column_size2(column[0], column[1], update_type)
             else
               raise OTSClientError("Unsupported column type:#{columns.class}")
             end

@@ -45,7 +45,10 @@ class PlainBufferOutputStream
   end
 
   def write_bytes(value)
-    raise TableStoreClientError.new("The buffer is full.") if @buffer.length + value.length > @capacity
+    if @buffer.length + value.length > @capacity
+      debugger
+      raise TableStoreClientError.new("The buffer is full.")
+    end
     bytes = ''
     value.to_s.each_byte do |b|
       bytes += [b].pack("C*")

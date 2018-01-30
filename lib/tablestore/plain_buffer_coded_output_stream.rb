@@ -158,10 +158,10 @@ class  PlainBufferCodedOutputStream
     timestamp = nil
     if column_value
       if column_value.is_a?(Array)
-        if column_value[0]
+        unless column_value[0].nil?
           cell_check_sum = write_column_value_with_checksum(column_value[0], cell_check_sum)
         end
-        if column_value[1]
+        unless column_value[1].nil?
           timestamp = column_value[1]
         end
       else
